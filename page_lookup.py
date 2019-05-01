@@ -18,10 +18,10 @@ def reprompt():
     print(reprompt_text)
     lookup()
 
-def fuzzymatch():
-    string = input(">")
-    fuzzy_tuples = process.extract(string, data, limit=3)
-    fuzzy_list = [x[0] for x in fuzzy_tuples]
+def fuzzymatch(string):
+    print(f"No match found for {string}. Were you looking one of these instead?")
+    fuzzy_tuples = process.extract(string, data, limit=25)
+    fuzzy_list = [x[0] for x in fuzzy_tuples if x[1] > 50]
     display_results(fuzzy_list)
 
 def lookup(): #FIXME: get output to have proper capitalization
@@ -35,12 +35,11 @@ def lookup(): #FIXME: get output to have proper capitalization
     for x in data: # fuzz
         if string.lower() in x.get('name'):
             lookup_list.append(x)
-    display_results(lookup_list)
+    if lookup_list:
+        display_results(lookup_list)
+    else:
+        fuzzymatch(string)
 
-    fuzzy_tuples = process.extract(string, data, limit=3)
-    fuzzy_list = [x[0] for x in fuzzy_tuples]
-    print(fuzzy_list)
-    display_results(fuzzy_list)
 
 def display_results(list):
     for x in list:
@@ -49,5 +48,14 @@ def display_results(list):
 
     reprompt()
 
-#startup()
-fuzzymatch()
+def debug():
+    string = input(">")
+    fuzzy_tuples = process.extractBests(string, data)
+    fuzzy_list = [x[0] for x in fuzzy_tuples if x[1] > 60]
+    print(fuzzy_tuples)
+    print(fuzzy_list)
+    debug()
+
+#debug()
+
+startup()
