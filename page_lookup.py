@@ -1,3 +1,7 @@
+#
+# This code is old and no longer in use, but I'm keeping it for reference
+#
+
 import json
 import sys, json
 from fuzzywuzzy import fuzz
